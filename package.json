@@ -7,7 +7,7 @@
         "build": "next build",
         "start": "next start",
         "postinstall": "husky install",
-        "lint": "eslint --fix"
+        "lint": "npx eslint ."
     },
     "dependencies": {
         "next": "10.0.6",
@@ -32,7 +32,7 @@
     },
     "lint-staged": {
         "./**/*.{js,jsx,ts,tsx}": [
-            "eslint --fix"
+            "npm run lint"
         ]
     }
 }
