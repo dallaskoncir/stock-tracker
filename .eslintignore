@@ -2,3 +2,4 @@ node_modules
 .next
 .eslintrc.js
 next.config.js
+__mocks__
