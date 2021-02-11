@@ -3,7 +3,8 @@ import '@testing-library/jest-dom/extend-expect';
 import Home from '../pages/index';
 
 test('Check for Getting Started Text', () => {
-    const { getByText } = render(<Home />);
+    const { container, getByText } = render(<Home />);
 
     expect(getByText('Stock Comparison')).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
 });
