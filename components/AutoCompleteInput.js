@@ -9,10 +9,12 @@ export default function AutocompleteInput() {
     const [bestMatches, setBestMatches] = useState([]);
 
     const fetchResults = () => {
-        axios
-            .get(`${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${searchValue}`)
-            .then((res) => setBestMatches(res.data.bestMatches))
-            .catch((err) => console.log(err));
+        if (searchValue) {
+            axios
+                .get(`${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${searchValue}`)
+                .then((res) => setBestMatches(res.data.bestMatches))
+                .catch((err) => console.log(err));
+        }
     };
 
     const handleInputChange = (event) => {

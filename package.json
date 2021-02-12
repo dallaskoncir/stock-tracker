@@ -8,7 +8,7 @@
         "start": "next start",
         "lint": "eslint .",
         "test": "jest",
-        "testWatch": "jest --watch --silent"
+        "testWatch": "jest --watch"
     },
     "dependencies": {
         "axios": "^0.21.1",
