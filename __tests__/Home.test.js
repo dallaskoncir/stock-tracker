@@ -1,23 +1,11 @@
-import { render, unmountComponentAtNode } from 'react-dom';
+import { render } from '@testing-library/react';
+
 import Home from '../pages/index';
 
-let container = null;
+describe('<Home />', () => {
+    it('renders correctly', () => {
+        const { container } = render(<Home />);
 
-beforeEach(() => {
-    // setup a DOM element as a render target
-    container = document.createElement('div');
-    document.body.appendChild(container);
-});
-
-afterEach(() => {
-    // cleanup on exiting
-    unmountComponentAtNode(container);
-    container.remove();
-    container = null;
-});
-
-test('<Home /> should render correctly', () => {
-    render(<Home />, container);
-
-    expect(container).toMatchSnapshot();
+        expect(container).toMatchSnapshot();
+    });
 });
