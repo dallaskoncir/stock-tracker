@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Home /> renders correctly 1`] = `
+<div>
+  <main>
+    <h1>
+      Stock Comparison
+    </h1>
+    <p>
+      Search and select up to 3 stocks to compare.
+    </p>
+    <div>
+      <input
+        type="text"
+        value=""
+      />
+    </div>
+  </main>
+</div>
+`;
