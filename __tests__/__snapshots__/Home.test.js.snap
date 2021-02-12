@@ -11,6 +11,7 @@ exports[`<Home /> should render correctly 1`] = `
     </p>
     <div>
       <input
+        data-testid="search-input"
         type="text"
         value=""
       />

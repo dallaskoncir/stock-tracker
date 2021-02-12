@@ -39,6 +39,7 @@ export default function AutocompleteInput() {
         <div className={styles.searchContainer}>
             <input
                 className={styles.searchInput}
+                data-testid="search-input"
                 onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onFocus={handleInputFocus}
@@ -46,7 +47,7 @@ export default function AutocompleteInput() {
                 value={searchValue}
             />
             {bestMatches?.length ? (
-                <ul className={styles.searchResultList}>
+                <ul className={styles.searchResultList} data-testid="search-result-list">
                     {bestMatches.map((match, i) => (
                         <li className={styles.searchResultListItem} key={i}>
                             {match['2. name']}
