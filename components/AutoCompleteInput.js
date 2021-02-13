@@ -9,9 +9,8 @@ export default function AutocompleteInput() {
     const [bestMatches, setBestMatches] = useState([]);
 
     const fetchResults = async (query) => {
-        const url = `${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${query}`;
-
         if (query) {
+            const url = `${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${query}`;
             const response = await axios.get(url);
 
             setBestMatches(response.data.bestMatches);
@@ -24,14 +23,13 @@ export default function AutocompleteInput() {
         setSearchValue(value);
     };
 
-    const handleInputBlur = () => {
-        setBestMatches([]);
+    const handleResultClick = (symbol) => {
+        alert(symbol);
     };
 
-    const handleInputFocus = () => {
-        if (searchValue) {
-            fetchResults(searchValue);
-        }
+    const handleClearInput = () => {
+        setSearchValue('');
+        setBestMatches([]);
     };
 
     useEffect(() => {
@@ -39,23 +37,35 @@ export default function AutocompleteInput() {
     }, [searchValue]);
 
     return (
-        <div className={styles.searchContainer}>
-            <input
-                className={styles.searchInput}
-                data-testid="search-input"
-                onChange={handleInputChange}
-                onBlur={handleInputBlur}
-                onFocus={handleInputFocus}
-                type="text"
-                value={searchValue}
-            />
+        <div className={styles.autoCompleteContainer}>
+            <div className={styles.searchInputContainer}>
+                <input
+                    className={styles.searchInput}
+                    data-testid="search-input"
+                    onChange={handleInputChange}
+                    type="text"
+                    value={searchValue}
+                />
+                <button className={styles.clearSearchButton} onClick={handleClearInput}>
+                    X
+                </button>
+            </div>
+
             {bestMatches?.length ? (
                 <ul className={styles.searchResultList} data-testid="search-result-list">
-                    {bestMatches.map((match, i) => (
-                        <li className={styles.searchResultListItem} key={i}>
-                            {match['2. name']}
-                        </li>
-                    ))}
+                    {bestMatches.map((match, i) => {
+                        const symbol = match['1. symbol'];
+                        const name = match['2. name'];
+
+                        return (
+                            <li
+                                className={styles.searchResultListItem}
+                                key={i}
+                                onClick={() => handleResultClick(symbol)}>
+                                {name}
+                            </li>
+                        );
+                    })}
                 </ul>
             ) : null}
         </div>

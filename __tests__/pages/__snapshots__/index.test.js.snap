@@ -10,11 +10,16 @@ exports[`<Home /> renders correctly 1`] = `
       Search and select up to 3 stocks to compare.
     </p>
     <div>
-      <input
-        data-testid="search-input"
-        type="text"
-        value=""
-      />
+      <div>
+        <input
+          data-testid="search-input"
+          type="text"
+          value=""
+        />
+        <button>
+          X
+        </button>
+      </div>
     </div>
   </main>
 </div>
