@@ -31,6 +31,9 @@
         "prettier": "2.2.1"
     },
     "jest": {
+        "setupFilesAfterEnv": [
+            "<rootDir>/jest-setup.js"
+        ],
         "testPathIgnorePatterns": [
             "<rootDir>/.next/",
             "<rootDir>/node_modules/"

@@ -8,12 +8,13 @@ export default function AutocompleteInput() {
     const [searchValue, setSearchValue] = useState('');
     const [bestMatches, setBestMatches] = useState([]);
 
-    const fetchResults = () => {
-        if (searchValue) {
-            axios
-                .get(`${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${searchValue}`)
-                .then((res) => setBestMatches(res.data.bestMatches))
-                .catch((err) => console.log(err));
+    const fetchResults = async (query) => {
+        const url = `${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${query}`;
+
+        if (query) {
+            const response = await axios.get(url);
+
+            setBestMatches(response.data.bestMatches);
         }
     };
 
@@ -29,12 +30,12 @@ export default function AutocompleteInput() {
 
     const handleInputFocus = () => {
         if (searchValue) {
-            fetchResults();
+            fetchResults(searchValue);
         }
     };
 
     useEffect(() => {
-        fetchResults();
+        fetchResults(searchValue);
     }, [searchValue]);
 
     return (

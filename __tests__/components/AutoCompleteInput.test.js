@@ -1,21 +1,54 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import mockedAxios from 'axios';
 
 import AutoCompleteInput from '../../components/AutoCompleteInput';
 
 describe('<AutoCompleteInput />', () => {
-    test('It should render an empty input by default', () => {
-        const { getByTestId } = render(<AutoCompleteInput />);
-        const searchInput = getByTestId('search-input');
+    const setup = () => {
+        const utils = render(<AutoCompleteInput />);
+        const searchInput = utils.getByTestId('search-input');
+
+        return {
+            searchInput,
+            ...utils
+        };
+    };
+
+    test('Renders an empty input by default', () => {
+        const { searchInput } = setup();
 
         expect(searchInput.value).toBe('');
     });
 
-    test('It should allow the user to enter search text', () => {
-        const { getByTestId } = render(<AutoCompleteInput />);
-        const searchInput = getByTestId('search-input');
+    test('Entering text into the search input fetches data from the API and displays a result list', async () => {
+        const data = {
+            data: {
+                bestMatches: [
+                    {
+                        '1. symbol': 'AAP',
+                        '2. name': 'Advanced Auto Parts'
+                    },
+                    {
+                        '1. symbol': 'AAPL',
+                        '2. name': 'Apple Inc'
+                    }
+                ]
+            }
+        };
 
-        fireEvent.change(searchInput, { target: { value: 'AAP' } });
+        mockedAxios.get.mockResolvedValueOnce(data);
 
-        expect(searchInput.value).toBe('AAP');
+        const { searchInput, getByTestId } = setup();
+
+        await waitFor(() => {
+            fireEvent.change(searchInput, { target: { value: 'AAP' } });
+        });
+
+        const searchResultList = getByTestId('search-result-list');
+
+        await waitFor(() => {
+            expect(searchInput.value).toBe('AAP');
+            expect(searchResultList).toBeInTheDocument();
+        });
     });
 });
