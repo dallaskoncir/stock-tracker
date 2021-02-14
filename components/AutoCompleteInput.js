@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import { API_ROUTE_BASE } from '../constants';
 import styles from '../styles/components/AutoCompleteInput.module.css';
 
-export default function AutocompleteInput() {
+export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols }) {
     const [searchValue, setSearchValue] = useState('');
     const [bestMatches, setBestMatches] = useState([]);
 
@@ -24,7 +25,9 @@ export default function AutocompleteInput() {
     };
 
     const handleResultClick = (symbol) => {
-        alert(symbol);
+        if (selectedSymbols.length < 3) {
+            setSelectedSymbols([...selectedSymbols, symbol]);
+        }
     };
 
     const handleClearInput = () => {
@@ -62,7 +65,7 @@ export default function AutocompleteInput() {
                                 className={styles.searchResultListItem}
                                 key={i}
                                 onClick={() => handleResultClick(symbol)}>
-                                {name}
+                                {name} ({symbol})
                             </li>
                         );
                     })}
@@ -71,3 +74,8 @@ export default function AutocompleteInput() {
         </div>
     );
 }
+
+AutocompleteInput.propTypes = {
+    selectedSymbols: PropTypes.array.isRequired,
+    setSelectedSymbols: PropTypes.func.isRequired
+};
