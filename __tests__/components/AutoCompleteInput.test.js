@@ -5,7 +5,8 @@ import AutoCompleteInput from '../../components/AutoCompleteInput';
 
 describe('<AutoCompleteInput />', () => {
     const setup = () => {
-        const utils = render(<AutoCompleteInput />);
+        const props = { selectedSymbols: [], setSelectedSymbols: jest.fn() };
+        const utils = render(<AutoCompleteInput {...props} />);
         const searchInput = utils.getByTestId('search-input');
 
         return {
@@ -23,14 +24,14 @@ describe('<AutoCompleteInput />', () => {
     test('Entering text into the search input fetches data from the API and displays a result list', async () => {
         const data = {
             data: {
-                bestMatches: [
+                result: [
                     {
-                        '1. symbol': 'AAP',
-                        '2. name': 'Advanced Auto Parts'
+                        symbol: 'AAP',
+                        description: 'Advanced Auto Parts'
                     },
                     {
-                        '1. symbol': 'AAPL',
-                        '2. name': 'Apple Inc'
+                        symbol: 'AAPL',
+                        description: 'Apple Inc'
                     }
                 ]
             }
