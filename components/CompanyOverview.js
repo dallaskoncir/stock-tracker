@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
 
 import { API_ROUTE_BASE } from '../constants';
 import styles from '../styles/components/CompanyOverview.module.css';
@@ -43,28 +44,42 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
     }, [symbol]);
 
     return (
-        <div className={styles.selectedItem}>
-            <header className={styles.companyHeader}>
-                <h2>{companyData.Name}</h2>
-                <button
-                    className={styles.removeButton}
-                    onClick={() => handleRemoveButtonClick(symbol)}>
-                    X Remove
-                </button>
-            </header>
+        <>
+            {companyData.Name ? (
+                <div className={styles.selectedItem}>
+                    <header className={styles.companyHeader}>
+                        <h2>{companyData.Name}</h2>
+                        <button
+                            className={styles.removeButton}
+                            onClick={() => handleRemoveButtonClick(symbol)}>
+                            X
+                        </button>
+                    </header>
 
-            <section className={styles.companyEarnings}>
-                {earningsData.annualEarnings?.map((earnings, i) => {
-                    console.log(earnings);
-                })}
-            </section>
+                    <section className={styles.companyEarnings}>
+                        {earningsData.annualEarnings?.map((earnings) => {
+                            console.log(earnings);
+                        })}
+                    </section>
 
-            <section className={styles.companyStatistics}>
-                <h3>Statistics</h3>
-                <p>High: {formatCurrency(companyData['52WeekHigh'])}</p>
-                <p>Low: {formatCurrency(companyData['52WeekLow'])}</p>
-            </section>
-        </div>
+                    <section className={styles.companyStatistics}>
+                        <h3>Statistics</h3>
+                        <p>High: {formatCurrency(companyData['52WeekHigh'])}</p>
+                        <p>Low: {formatCurrency(companyData['52WeekLow'])}</p>
+                    </section>
+                </div>
+            ) : (
+                <div className={`${styles.selectedItem} ${styles.loading}`}>
+                    <Loader
+                        type="Puff"
+                        color="#3cc3b2"
+                        height={100}
+                        width={100}
+                        timeout={3000} //3 secs
+                    />
+                </div>
+            )}
+        </>
     );
 }
 
