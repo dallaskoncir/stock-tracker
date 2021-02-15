@@ -3,24 +3,15 @@
 exports[`<Home /> renders correctly 1`] = `
 <div>
   <main>
-    <h1>
-      Stock Comparison
-    </h1>
-    <p>
-      Search and select up to 3 stocks to compare.
-    </p>
-    <div>
-      <div>
-        <input
-          data-testid="search-input"
-          type="text"
-          value=""
-        />
-        <button>
-          X
-        </button>
-      </div>
-    </div>
+    <header>
+      <h1>
+        Stock Comparison
+      </h1>
+      <p>
+        Search and select up to 3 stocks to compare.
+      </p>
+    </header>
+    <section />
   </main>
 </div>
 `;
