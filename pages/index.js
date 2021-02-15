@@ -60,7 +60,9 @@ export default function Home() {
                             />
                         ))}
 
-                        {selectedSymbols.length < 3 ? <PlaceholderCardNoSSR /> : null}
+                        {selectedSymbols.length < 3 ? (
+                            <PlaceholderCardNoSSR selectedSymbols={selectedSymbols} />
+                        ) : null}
                     </>
                 </section>
             </main>
