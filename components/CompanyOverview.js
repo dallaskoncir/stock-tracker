@@ -5,27 +5,16 @@ import Loader from 'react-loader-spinner';
 
 import { API_ROUTE_BASE } from '../constants';
 import styles from '../styles/components/CompanyOverview.module.css';
+import EarningsChart from './EarningsChart';
 
 export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSymbols }) {
     const [companyData, setCompanyData] = useState({});
-    const [earningsData, setEarningsData] = useState({});
 
     const fetchCompanyData = async () => {
         const url = `${API_ROUTE_BASE}&function=OVERVIEW&symbol=${symbol}`;
         const response = await axios.get(url);
 
-        console.log(response.data);
-
         setCompanyData(response.data);
-    };
-
-    const fetchEarningsData = async () => {
-        const url = `${API_ROUTE_BASE}&function=EARNINGS&symbol=${symbol}`;
-        const response = await axios.get(url);
-
-        console.log(response.data);
-
-        setEarningsData(response.data);
     };
 
     const formatCurrency = (str) => {
@@ -40,7 +29,6 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
 
     useEffect(() => {
         fetchCompanyData();
-        fetchEarningsData();
     }, [symbol]);
 
     return (
@@ -57,13 +45,11 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
                     </header>
 
                     <section className={styles.companyEarnings}>
-                        {earningsData.annualEarnings?.map((earnings) => {
-                            console.log(earnings);
-                        })}
+                        <EarningsChart symbol={symbol} name={companyData.Name} />
                     </section>
 
                     <section className={styles.companyStatistics}>
-                        <h3>Statistics</h3>
+                        <h3>Stock Price (Past Year)</h3>
                         <p>High: {formatCurrency(companyData['52WeekHigh'])}</p>
                         <p>Low: {formatCurrency(companyData['52WeekLow'])}</p>
                     </section>
