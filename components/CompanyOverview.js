@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 
-import { API_ROUTE_BASE } from '../constants';
+import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/CompanyOverview.module.css';
 import EarningsChart from './EarningsChart';
 
@@ -11,10 +11,14 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
     const [companyData, setCompanyData] = useState({});
 
     const fetchCompanyData = async () => {
-        const url = `${API_ROUTE_BASE}&function=OVERVIEW&symbol=${symbol}`;
-        const response = await axios.get(url);
+        const profileUrl = `${API_ROUTE_BASE}/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
+        const financialsUrl = `${API_ROUTE_BASE}/stock/metric?symbol=${symbol}&token=${API_KEY}`;
+        const [profileResponse, financialsResponse] = await Promise.all([
+            axios.get(profileUrl),
+            axios.get(financialsUrl)
+        ]);
 
-        setCompanyData(response.data);
+        setCompanyData({ ...profileResponse.data, ...financialsResponse.data });
     };
 
     const formatCurrency = (str) => {
@@ -23,6 +27,8 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
 
     const handleRemoveButtonClick = (item) => {
         const newSelectedSymbols = selectedSymbols.filter((symbol) => item !== symbol);
+
+        localStorage.setItem('selectedSymbols', newSelectedSymbols);
 
         setSelectedSymbols([...newSelectedSymbols]);
     };
@@ -33,10 +39,10 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
 
     return (
         <>
-            {companyData.Name ? (
+            {companyData.name ? (
                 <div className={styles.selectedItem}>
                     <header className={styles.companyHeader}>
-                        <h2>{companyData.Name}</h2>
+                        <h2>{companyData.name}</h2>
                         <button
                             className={styles.removeButton}
                             onClick={() => handleRemoveButtonClick(symbol)}>
@@ -45,13 +51,16 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
                     </header>
 
                     <section className={styles.companyEarnings}>
-                        <EarningsChart symbol={symbol} name={companyData.Name} />
+                        <EarningsChart
+                            name={companyData.name}
+                            annualEarnings={companyData.series.annual.eps}
+                        />
                     </section>
 
                     <section className={styles.companyStatistics}>
                         <h3>Stock Price (Past Year)</h3>
-                        <p>High: {formatCurrency(companyData['52WeekHigh'])}</p>
-                        <p>Low: {formatCurrency(companyData['52WeekLow'])}</p>
+                        <p>High: {formatCurrency(companyData.metric['52WeekHigh'])}</p>
+                        <p>Low: {formatCurrency(companyData.metric['52WeekLow'])}</p>
                     </section>
                 </div>
             ) : (

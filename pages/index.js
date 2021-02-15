@@ -1,12 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
-import AutoCompleteInput from '../components/AutoCompleteInput';
-import CompanyOverview from '../components/CompanyOverview';
 import styles from '../styles/pages/Home.module.css';
+
+const PlaceholderCardNoSSR = dynamic(() => import('../components/PlaceholderCard'), {
+    ssr: false
+});
+
+const AutoCompleteInputNoSSR = dynamic(() => import('../components/AutoCompleteInput'), {
+    ssr: false
+});
+
+const CompanyOverviewNoSSR = dynamic(() => import('../components/CompanyOverview'), {
+    ssr: false
+});
 
 export default function Home() {
     const [selectedSymbols, setSelectedSymbols] = useState([]);
+
+    if (typeof window !== 'undefined' && !selectedSymbols.length) {
+        const savedSymbols = localStorage.getItem('selectedSymbols');
+
+        if (savedSymbols) {
+            setSelectedSymbols(savedSymbols.split(','));
+        }
+    }
+
+    useEffect(() => {
+        localStorage.setItem('selectedSymbols', selectedSymbols);
+    }, [selectedSymbols]);
 
     return (
         <>
@@ -21,20 +44,24 @@ export default function Home() {
                     <p>Search and select up to 3 stocks to compare.</p>
                 </header>
 
-                <AutoCompleteInput
+                <AutoCompleteInputNoSSR
                     selectedSymbols={selectedSymbols}
                     setSelectedSymbols={setSelectedSymbols}
                 />
 
                 <section className={styles.contentArea}>
-                    {selectedSymbols.map((symbol, i) => (
-                        <CompanyOverview
-                            key={i}
-                            symbol={symbol}
-                            selectedSymbols={selectedSymbols}
-                            setSelectedSymbols={setSelectedSymbols}
-                        />
-                    ))}
+                    <>
+                        {selectedSymbols.map((symbol, i) => (
+                            <CompanyOverviewNoSSR
+                                key={i}
+                                symbol={symbol}
+                                selectedSymbols={selectedSymbols}
+                                setSelectedSymbols={setSelectedSymbols}
+                            />
+                        ))}
+
+                        {selectedSymbols.length < 3 ? <PlaceholderCardNoSSR /> : null}
+                    </>
                 </section>
             </main>
         </>

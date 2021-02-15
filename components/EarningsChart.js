@@ -1,30 +1,13 @@
-import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-import { API_ROUTE_BASE } from '../constants';
+export default function EarningsChart({ name, annualEarnings }) {
+    const mappedEarningsData = annualEarnings.map((data) => {
+        const { period, v } = data;
+        const formattedDate = Date.parse(period);
 
-export default function EarningsChart({ symbol, name }) {
-    const [earningsData, setEarningsData] = useState({});
-
-    const fetchEarningsData = async () => {
-        const url = `${API_ROUTE_BASE}&function=EARNINGS&symbol=${symbol}`;
-        const response = await axios.get(url);
-
-        setEarningsData(response.data);
-    };
-
-    useEffect(() => {
-        fetchEarningsData();
-    }, []);
-
-    const mappedEarningsData = earningsData?.annualEarnings?.map((data) => {
-        const { fiscalDateEnding, reportedEPS } = data;
-        const formattedEps = Number(reportedEPS);
-
-        return [fiscalDateEnding, formattedEps];
+        return [formattedDate, v];
     });
 
     const options = {
@@ -32,7 +15,7 @@ export default function EarningsChart({ symbol, name }) {
         series: [
             {
                 name,
-                data: mappedEarningsData?.length ? [...mappedEarningsData.reverse()] : []
+                data: mappedEarningsData.reverse()
             }
         ],
         title: {
@@ -53,6 +36,6 @@ export default function EarningsChart({ symbol, name }) {
 }
 
 EarningsChart.propTypes = {
-    symbol: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    annualEarnings: PropTypes.array.isRequired
 };

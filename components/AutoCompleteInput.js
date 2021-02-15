@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { API_ROUTE_BASE } from '../constants';
+import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/AutoCompleteInput.module.css';
 
 export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols }) {
     const [searchValue, setSearchValue] = useState('');
-    const [bestMatches, setBestMatches] = useState([]);
+    const [results, setResults] = useState([]);
 
     const fetchResults = async (query) => {
         if (query) {
-            const url = `${API_ROUTE_BASE}&function=SYMBOL_SEARCH&keywords=${query}`;
+            const url = `${API_ROUTE_BASE}/search?q=${query}&token=${API_KEY}`;
             const response = await axios.get(url);
 
-            setBestMatches(response.data.bestMatches);
+            setResults(response.data.result);
         }
     };
 
@@ -32,7 +32,7 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
 
     const handleClearInput = () => {
         setSearchValue('');
-        setBestMatches([]);
+        setResults([]);
     };
 
     useEffect(() => {
@@ -48,24 +48,24 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                     onChange={handleInputChange}
                     type="text"
                     value={searchValue}
+                    disabled={selectedSymbols.length === 3}
                 />
                 <button className={styles.clearSearchButton} onClick={handleClearInput}>
                     X
                 </button>
             </div>
 
-            {bestMatches?.length ? (
+            {results?.length ? (
                 <ul className={styles.searchResultList} data-testid="search-result-list">
-                    {bestMatches.map((match, i) => {
-                        const symbol = match['1. symbol'];
-                        const name = match['2. name'];
+                    {results.map((result, i) => {
+                        const { description, symbol } = result;
 
                         return (
                             <li
                                 className={styles.searchResultListItem}
                                 key={i}
                                 onClick={() => handleResultClick(symbol)}>
-                                {name} ({symbol})
+                                {description} ({symbol})
                             </li>
                         );
                     })}
