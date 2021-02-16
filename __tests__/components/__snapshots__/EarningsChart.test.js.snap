@@ -9,7 +9,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
     <div
       class="highcharts-container "
       dir="ltr"
-      id="highcharts-0rkirm7-0"
+      id="highcharts-fiy0r4g-0"
       style="position: relative; overflow: hidden; width: 600px; height: 400px; text-align: left; line-height: normal; z-index: 0; user-select: none;"
     >
       <svg
@@ -26,7 +26,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
         </desc>
         <defs>
           <clippath
-            id="highcharts-0rkirm7-1-"
+            id="highcharts-fiy0r4g-1-"
           >
             <rect
               fill="none"
@@ -37,7 +37,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
             />
           </clippath>
           <clippath
-            id="highcharts-0rkirm7-4-"
+            id="highcharts-fiy0r4g-4-"
           >
             <rect
               fill="none"
@@ -48,7 +48,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
             />
           </clippath>
           <clippath
-            id="highcharts-0rkirm7-5-"
+            id="highcharts-fiy0r4g-5-"
           >
             <rect
               fill="none"
@@ -197,7 +197,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
         >
           <g
             class="highcharts-series highcharts-series-0 highcharts-line-series highcharts-color-0"
-            clip-path="url(#highcharts-0rkirm7-5-)"
+            clip-path="url(#highcharts-fiy0r4g-5-)"
             data-z-index="0.1"
             opacity="1"
             transform="translate(0,10) scale(1 1)"
@@ -226,7 +226,7 @@ exports[`<EarningsChart /> Renders correctly with annualEarnings data supplied 1
           </g>
           <g
             class="highcharts-markers highcharts-series-0 highcharts-line-series highcharts-color-0 highcharts-tracker"
-            clip-path="url(#highcharts-0rkirm7-4-)"
+            clip-path="url(#highcharts-fiy0r4g-4-)"
             data-z-index="0.1"
             opacity="1"
             transform="translate(0,10) scale(1 1)"

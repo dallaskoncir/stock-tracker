@@ -7,7 +7,7 @@ describe('<CompanyOverview />', () => {
     test('Renders a loader by default', () => {
         const { getByTestId } = render(
             <CompanyOverview
-                symbol="AAPL"
+                selectedSymbol="AAPL"
                 selectedSymbols={['AAPL']}
                 setSelectedSymbols={jest.fn()}
             />
@@ -47,7 +47,7 @@ describe('<CompanyOverview />', () => {
 
         const { getByTestId, getByText } = await render(
             <CompanyOverview
-                symbol="AAPL"
+                selectedSymbol="AAPL"
                 selectedSymbols={['AAPL']}
                 setSelectedSymbols={jest.fn()}
             />
