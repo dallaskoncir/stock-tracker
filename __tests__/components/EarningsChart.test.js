@@ -8,10 +8,12 @@ describe('<EarningsChart />', () => {
             { period: '2020-09-26', v: 3.2753 },
             { period: '2019-09-28', v: 2.9714 }
         ];
-        const { container } = render(
+        const { getByText } = render(
             <EarningsChart name="Apple Inc." annualEarnings={annualEarnings} />
         );
 
-        expect(container).toMatchSnapshot();
+        expect(getByText('Apple Inc.')).toBeInTheDocument();
+        expect(getByText('3.2')).toBeInTheDocument();
+        expect(getByText('2.9')).toBeInTheDocument();
     });
 });

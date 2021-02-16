@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 import { store } from 'react-notifications-component';
+import useIsMounted from 'ismounted';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/CompanyOverview.module.css';
@@ -11,6 +12,7 @@ import EarningsChart from './EarningsChart';
 export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSelectedSymbols }) {
     const [companyData, setCompanyData] = useState({});
     const [error, setError] = useState(false);
+    const isMounted = useIsMounted();
 
     const fetchCompanyData = async (symbol) => {
         const profileUrl = `${API_ROUTE_BASE}/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
@@ -22,7 +24,9 @@ export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSe
             profileResponse = await axios.get(profileUrl);
             financialsResponse = await axios.get(financialsUrl);
 
-            setCompanyData({ ...profileResponse?.data, ...financialsResponse?.data });
+            if (isMounted.current) {
+                setCompanyData({ ...profileResponse?.data, ...financialsResponse?.data });
+            }
         } catch (err) {
             setError(true);
 

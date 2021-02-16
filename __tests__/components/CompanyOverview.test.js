@@ -40,12 +40,12 @@ describe('<CompanyOverview />', () => {
             }
         };
 
-        await Promise.all([
+        Promise.all([
             mockedAxios.get.mockResolvedValueOnce(data1),
             mockedAxios.get.mockResolvedValueOnce(data2)
         ]);
 
-        const { getByTestId, getByText } = await render(
+        const { getByTestId, getByText } = render(
             <CompanyOverview
                 selectedSymbol="AAPL"
                 selectedSymbols={['AAPL']}
