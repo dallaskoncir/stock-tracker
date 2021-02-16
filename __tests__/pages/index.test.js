@@ -1,11 +1,11 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import Home from '../../pages/index';
 
 describe('<Home />', () => {
-    it('renders correctly', () => {
+    it('renders correctly', async () => {
         const { container } = render(<Home />);
 
-        expect(container).toMatchSnapshot();
+        await waitFor(() => expect(container).toMatchSnapshot());
     });
 });
