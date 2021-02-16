@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { store } from 'react-notifications-component';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/AutoCompleteInput.module.css';
@@ -12,9 +13,27 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
     const fetchResults = async (query) => {
         if (query) {
             const url = `${API_ROUTE_BASE}/search?q=${query}&token=${API_KEY}`;
-            const response = await axios.get(url);
+            let response = [];
 
-            setResults(response.data.result);
+            try {
+                response = await axios.get(`${url}`);
+
+                setResults(response.data.result);
+            } catch (err) {
+                store.addNotification({
+                    title: 'Error!',
+                    message: err.message,
+                    type: 'danger',
+                    insert: 'top',
+                    container: 'top-right',
+                    animationIn: ['animate__animated', 'animate__fadeIn'],
+                    animationOut: ['animate__animated', 'animate__fadeOut'],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                });
+            }
         }
     };
 

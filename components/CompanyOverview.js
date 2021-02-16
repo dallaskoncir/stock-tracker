@@ -2,23 +2,53 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
+import { store } from 'react-notifications-component';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/CompanyOverview.module.css';
 import EarningsChart from './EarningsChart';
 
-export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSymbols }) {
+export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSelectedSymbols }) {
     const [companyData, setCompanyData] = useState({});
+    const [error, setError] = useState(false);
 
-    const fetchCompanyData = async () => {
+    const fetchCompanyData = async (symbol) => {
         const profileUrl = `${API_ROUTE_BASE}/stock/profile2?symbol=${symbol}&token=${API_KEY}`;
         const financialsUrl = `${API_ROUTE_BASE}/stock/metric?symbol=${symbol}&token=${API_KEY}`;
-        const [profileResponse, financialsResponse] = await Promise.all([
-            axios.get(profileUrl),
-            axios.get(financialsUrl)
-        ]);
+        let profileResponse = {};
+        let financialsResponse = {};
 
-        setCompanyData({ ...profileResponse?.data, ...financialsResponse?.data });
+        try {
+            profileResponse = await axios.get(profileUrl);
+            financialsResponse = await axios.get(financialsUrl);
+
+            setCompanyData({ ...profileResponse?.data, ...financialsResponse?.data });
+        } catch (err) {
+            setError(true);
+
+            store.addNotification({
+                title: 'Error!',
+                message: err.message,
+                type: 'danger',
+                insert: 'top',
+                container: 'top-right',
+                animationIn: ['animate__animated', 'animate__fadeIn'],
+                animationOut: ['animate__animated', 'animate__fadeOut'],
+                dismiss: {
+                    duration: 5000,
+                    onScreen: true
+                }
+            });
+        }
+    };
+
+    const renderErrorState = () => {
+        return (
+            <div className={styles.errorState}>
+                <div className={styles.exclamation}>!</div>
+                <p>There was an error fetching the company data.</p>
+            </div>
+        );
     };
 
     const formatCurrency = (str) => {
@@ -34,8 +64,8 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
     };
 
     useEffect(() => {
-        fetchCompanyData();
-    }, [symbol]);
+        fetchCompanyData(selectedSymbol);
+    }, [selectedSymbol]);
 
     return (
         <>
@@ -46,7 +76,7 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
                         <button
                             className={styles.removeButton}
                             data-testid="remove-button"
-                            onClick={() => handleRemoveButtonClick(symbol)}>
+                            onClick={() => handleRemoveButtonClick(selectedSymbol)}>
                             X
                         </button>
                     </header>
@@ -78,7 +108,9 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
                         height={100}
                         width={100}
                         timeout={3000} //3 secs
+                        visible={!error}
                     />
+                    {error ? renderErrorState() : null}
                 </div>
             )}
         </>
@@ -86,7 +118,7 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
 }
 
 CompanyOverview.propTypes = {
-    symbol: PropTypes.string.isRequired,
+    selectedSymbol: PropTypes.string.isRequired,
     selectedSymbols: PropTypes.array.isRequired,
     setSelectedSymbols: PropTypes.func.isRequired
 };
