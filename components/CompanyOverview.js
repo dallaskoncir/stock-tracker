@@ -18,7 +18,7 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
             axios.get(financialsUrl)
         ]);
 
-        setCompanyData({ ...profileResponse.data, ...financialsResponse.data });
+        setCompanyData({ ...profileResponse?.data, ...financialsResponse?.data });
     };
 
     const formatCurrency = (str) => {
@@ -42,9 +42,10 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
             {companyData.name ? (
                 <div className={styles.selectedItem}>
                     <header className={styles.companyHeader}>
-                        <h2>{companyData.name}</h2>
+                        <h2 data-testid="company-name">{companyData.name}</h2>
                         <button
                             className={styles.removeButton}
+                            data-testid="remove-button"
                             onClick={() => handleRemoveButtonClick(symbol)}>
                             X
                         </button>
@@ -52,19 +53,25 @@ export default function CompanyOverview({ symbol, selectedSymbols, setSelectedSy
 
                     <section className={styles.companyEarnings}>
                         <EarningsChart
-                            name={companyData.name}
                             annualEarnings={companyData.series.annual.eps}
+                            name={companyData.name}
                         />
                     </section>
 
                     <section className={styles.companyStatistics}>
                         <h3>Stock Price (Past Year)</h3>
-                        <p>High: {formatCurrency(companyData.metric['52WeekHigh'])}</p>
-                        <p>Low: {formatCurrency(companyData.metric['52WeekLow'])}</p>
+                        <p data-testid="stock-price-high">
+                            High: {formatCurrency(companyData.metric['52WeekHigh'])}
+                        </p>
+                        <p data-testid="stock-price-low">
+                            Low: {formatCurrency(companyData.metric['52WeekLow'])}
+                        </p>
                     </section>
                 </div>
             ) : (
-                <div className={`${styles.selectedItem} ${styles.loading}`}>
+                <div
+                    className={`${styles.selectedItem} ${styles.loading}`}
+                    data-testid="overview-loader">
                     <Loader
                         type="Puff"
                         color="#3cc3b2"
