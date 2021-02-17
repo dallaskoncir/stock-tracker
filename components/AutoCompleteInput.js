@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
+import Loader from 'react-loader-spinner';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/AutoCompleteInput.module.css';
@@ -9,11 +10,14 @@ import styles from '../styles/components/AutoCompleteInput.module.css';
 export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols }) {
     const [searchValue, setSearchValue] = useState('');
     const [results, setResults] = useState([]);
+    const [fetchingResults, setFetchingResults] = useState(false);
 
     const fetchResults = async (query) => {
         if (query) {
             const url = `${API_ROUTE_BASE}/search?q=${query}&token=${API_KEY}`;
             let response = [];
+
+            setFetchingResults(true);
 
             try {
                 response = await axios.get(`${url}`);
@@ -33,6 +37,8 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                         onScreen: true
                     }
                 });
+            } finally {
+                setFetchingResults(false);
             }
         }
     };
@@ -58,6 +64,13 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
         fetchResults(searchValue);
     }, [searchValue]);
 
+    useEffect(() => {
+        if (selectedSymbols.length === 3) {
+            setSearchValue('');
+            setResults([]);
+        }
+    }, [selectedSymbols]);
+
     return (
         <div className={styles.autoCompleteContainer}>
             <div className={styles.searchInputContainer}>
@@ -72,6 +85,17 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                         selectedSymbols.length === 3 ? 'Remove a company to search again' : null
                     }
                 />
+                {fetchingResults && (
+                    <div className={styles.searchLoading} data-testid="search-loading">
+                        <Loader
+                            type="Puff"
+                            color="#3cc3b2"
+                            height={24}
+                            width={24}
+                            visible={fetchingResults}
+                        />
+                    </div>
+                )}
                 {searchValue && (
                     <button
                         className={styles.clearSearchButton}

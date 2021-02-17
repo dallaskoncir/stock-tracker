@@ -106,14 +106,7 @@ export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSe
                 <div
                     className={`${styles.selectedItem} ${styles.loading}`}
                     data-testid="overview-loader">
-                    <Loader
-                        type="Puff"
-                        color="#3cc3b2"
-                        height={100}
-                        width={100}
-                        timeout={3000} //3 secs
-                        visible={!error}
-                    />
+                    <Loader type="Puff" color="#3cc3b2" height={100} width={100} visible={!error} />
                     {error ? renderErrorState() : null}
                 </div>
             )}
