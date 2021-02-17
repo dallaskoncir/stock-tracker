@@ -68,10 +68,15 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                     type="text"
                     value={searchValue}
                     disabled={selectedSymbols.length === 3}
+                    placeholder={
+                        selectedSymbols.length === 3 ? 'Remove a company to search again' : null
+                    }
                 />
-                <button className={styles.clearSearchButton} onClick={handleClearInput}>
-                    X
-                </button>
+                {searchValue && (
+                    <button className={styles.clearSearchButton} onClick={handleClearInput}>
+                        X
+                    </button>
+                )}
             </div>
 
             {results?.length ? (
