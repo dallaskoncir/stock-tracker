@@ -45,10 +45,12 @@ describe('<AutoCompleteInput />', () => {
             fireEvent.change(searchInput, { target: { value: 'AAP' } });
         });
 
+        const searchClearButton = getByTestId('search-clear-button');
         const searchResultList = getByTestId('search-result-list');
 
         await waitFor(() => {
             expect(searchInput.value).toBe('AAP');
+            expect(searchClearButton).toBeInTheDocument();
             expect(searchResultList).toBeInTheDocument();
         });
     });

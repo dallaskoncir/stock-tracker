@@ -73,7 +73,10 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                     }
                 />
                 {searchValue && (
-                    <button className={styles.clearSearchButton} onClick={handleClearInput}>
+                    <button
+                        className={styles.clearSearchButton}
+                        data-testid="search-clear-button"
+                        onClick={handleClearInput}>
                         X
                     </button>
                 )}
