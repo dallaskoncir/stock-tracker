@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { store } from 'react-notifications-component';
-import Loader from 'react-loader-spinner';
+import { Puff } from 'react-loader-spinner';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
 import styles from '../styles/components/AutoCompleteInput.module.css';
@@ -87,13 +87,7 @@ export default function AutocompleteInput({ selectedSymbols, setSelectedSymbols 
                 />
                 {fetchingResults && (
                     <div className={styles.searchLoading} data-testid="search-loading">
-                        <Loader
-                            type="Puff"
-                            color="#3cc3b2"
-                            height={24}
-                            width={24}
-                            visible={fetchingResults}
-                        />
+                        <Puff color="#3cc3b2" height={24} width={24} visible={fetchingResults} />
                     </div>
                 )}
                 {searchValue && (

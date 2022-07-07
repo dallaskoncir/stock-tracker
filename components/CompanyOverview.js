@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import Loader from 'react-loader-spinner';
-import { store } from 'react-notifications-component';
+import { Puff } from 'react-loader-spinner';
+import { Store } from 'react-notifications-component';
 import useIsMounted from 'ismounted';
 
 import { API_ROUTE_BASE, API_KEY } from '../constants';
@@ -30,7 +30,7 @@ export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSe
         } catch (err) {
             setError(true);
 
-            store.addNotification({
+            Store.addNotification({
                 title: 'Error!',
                 message: err.message,
                 type: 'danger',
@@ -106,7 +106,7 @@ export default function CompanyOverview({ selectedSymbol, selectedSymbols, setSe
                 <div
                     className={`${styles.selectedItem} ${styles.loading}`}
                     data-testid="overview-loader">
-                    <Loader type="Puff" color="#3cc3b2" height={100} width={100} visible={!error} />
+                    <Puff color="#3cc3b2" height={100} width={100} visible={!error} />
                     {error ? renderErrorState() : null}
                 </div>
             )}
