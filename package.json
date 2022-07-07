@@ -38,6 +38,9 @@
         "setupFiles": [
             "<rootDir>/jest-setup.js"
         ],
+        "setupFilesAfterEnv": [
+            "<rootDir>/extend-expect.js"
+        ],
         "testPathIgnorePatterns": [
             "<rootDir>/.next/",
             "<rootDir>/node_modules/"
